@@ -332,9 +332,6 @@ bad:
 
 pde_t *cowuvm(pde_t *pgdir, uint sz)
 {
-  // set to read only
-
-  // increase ref count
   pde_t *d;
   pte_t *pte;
   uint pa, i, flags;
@@ -344,21 +341,31 @@ pde_t *cowuvm(pde_t *pgdir, uint sz)
     return 0;
   for (i = 0; i < sz; i += PGSIZE)
   {
+    // get pte
     if ((pte = walkpgdir(pgdir, (void *)i, 0)) == 0)
       panic("copyuvm: pte should exist");
     if (!(*pte & PTE_P))
       panic("copyuvm: page not present");
+
+    // get physical addr
     pa = PTE_ADDR(*pte);
 
+    // make read only
     *pte = (uint)*pte & ~PTE_W;
     flags = PTE_FLAGS(*pte);
+
+    // increment ref_cnt
     incref((struct run *)pa, 1);
+
+    // flush tlb
     lcr3(PADDR(pgdir));
 
     // don't include kalloc
     // if ((mem = kalloc()) == 0)
     //   goto bad;
     // memmove(mem, (char *)pa, PGSIZE);
+
+    // map old page into new proc's pt
     cprintf("before vm map\n");
     if (mappages(d, (void *)i, PGSIZE, PADDR(pa), flags) < 0)
       goto bad;

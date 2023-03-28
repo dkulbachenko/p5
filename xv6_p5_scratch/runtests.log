@@ -81,15 +81,15 @@ ld  -m    elf_i386 -nostdlib --omagic \
 dd if=/dev/zero of=xv6.img count=10000
 10000+0 records in
 10000+0 records out
-5120000 bytes (5.1 MB, 4.9 MiB) copied, 0.00960495 s, 533 MB/s
+5120000 bytes (5.1 MB, 4.9 MiB) copied, 0.0119069 s, 430 MB/s
 dd if=kernel/bootblock of=xv6.img conv=notrunc
 1+0 records in
 1+0 records out
-512 bytes copied, 0.000101965 s, 5.0 MB/s
+512 bytes copied, 4.3444e-05 s, 11.8 MB/s
 dd if=kernel/kernel of=xv6.img seek=1 conv=notrunc
 278+1 records in
 278+1 records out
-142684 bytes (143 kB, 139 KiB) copied, 0.000283512 s, 503 MB/s
+142708 bytes (143 kB, 139 KiB) copied, 0.000345391 s, 413 MB/s
 
 
 test build PASSED
@@ -113,23 +113,23 @@ ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x0 --o
 cp user/bin/tester fs/tester
 ./tools/mkfs fs.img fs
 used 29 (bit 1 ninode 26) free 29 total 1024
-kill
-ln
-forktest
-rm
-mkdir
-usertests
-ls
-echo
-wc
-stressfs
-grep
 tester
+sh
+ln
+cat
+README
+stressfs
+forktest
+ls
+kill
+rm
+wc
+grep
+usertests
+mkdir
 zombie
 init
-README
-cat
-sh
+echo
 balloc: first 454 blocks have been allocated
 balloc: write bitmap block at sector 28
 rm user/bin/tester
@@ -161,7 +161,7 @@ before trap map
 after trap map
 starting pg fault
 ref count was 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT 2
+Decrement refcount from 2
 $ tester
 tester
 before vm map

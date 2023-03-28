@@ -63,14 +63,20 @@ void kfree(char *v)
   acquire(&kmem.lock);
 
   r = (struct run *)v;
-  if (kmem.ref_cnt[(uint)v / PGSIZE] != 1)
-    cprintf("WARNING: TRYING TO FREE PAGE WITH REFCOUNT %d\n", kmem.ref_cnt[(uint)v / PGSIZE]);
-
-  r->next = kmem.freelist;
-  kmem.freelist = r;
-  kmem.free_pages++;
-
-  kmem.ref_cnt[(uint)v / PGSIZE] = 0;
+  if (kmem.ref_cnt[(uint)v / PGSIZE] > 1)
+  {
+    cprintf("Decrement refcount from %d\n", kmem.ref_cnt[(uint)v / PGSIZE]);
+    kmem.ref_cnt[(uint)v / PGSIZE]--;
+  }
+  else
+  {
+    if (kmem.ref_cnt[(uint)v / PGSIZE] != 1)
+      cprintf("WARNING: TRYING TO FREE PAGE WITH REFCOUNT %d\n", kmem.ref_cnt[(uint)v / PGSIZE]);
+    r->next = kmem.freelist;
+    kmem.freelist = r;
+    kmem.free_pages++;
+    kmem.ref_cnt[(uint)v / PGSIZE] = 0;
+  }
 
   release(&kmem.lock);
 }
@@ -88,29 +94,31 @@ kalloc(void)
   if (r)
   {
     kmem.freelist = r->next;
+
+    // set ref_cnt to 1 and decrease free pages
     kmem.ref_cnt[(uint)r / PGSIZE] = 1;
     kmem.free_pages--;
-    // r->refcount = 1;
   }
 
   release(&kmem.lock);
   return (char *)r;
 }
 
-void incref(struct run *page, int amount)
+void incref(struct run *addr, int amount)
 {
   acquire(&kmem.lock);
-  // panic("incrementing ref count of page\n");
-  kmem.ref_cnt[(uint)page / PGSIZE] += amount;
-  // page->refcount += amount;
+  // increment entry in ref_cnt by specified amount
+  kmem.ref_cnt[(uint)addr / PGSIZE] += amount;
   release(&kmem.lock);
 }
 
+// returns free pages
 int helpFreePages(void)
 {
   return (int)kmem.free_pages;
 }
 
+// returns reference count at given addr
 int getRefs(uint addr)
 {
   return kmem.ref_cnt[addr / PGSIZE];

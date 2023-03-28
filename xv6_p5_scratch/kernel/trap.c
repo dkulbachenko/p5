@@ -79,52 +79,68 @@ void trap(struct trapframe *tf)
     // code for handling page fault
     cprintf("starting pg fault\n");
     uint addr = rcr2();
-    // int refs = getRefs(addr);
-    pte_t *pte;
 
+    // check validity of va
     if (addr > USERTOP)
     {
       cprintf("CoW: Invalid virtual address\n");
       exit();
     }
 
+    // get pte of faulting addr
+    pte_t *pte;
     if ((pte = walkpgdirHelper(getpgdir(), (void *)(addr), 0)) == 0)
     {
       panic("trap should be in pt\n");
     }
 
+    // get physical addr of pte as well as the ref_cnt of that address
     uint pa = PTE_ADDR(*pte);
     int refs = getRefs(pa);
 
+    // if the ref_cnt was zero for some reason
     if (refs == 0)
     {
       cprintf("Shoud have more than 0 Refs if in page table\n");
     }
 
+    // if we don't need to copy, just change permissions
     if (refs == 1)
     {
+      // set writeable bits
       *pte = (uint)*pte | PTE_W;
+      // flush tlb
       lcr3(PADDR(getpgdir()));
       cprintf("ref count was 1\n");
       break;
     }
 
-    uint flags;
-
+    // set to writeable
     *pte = (uint)*pte | PTE_W;
+    // set to not present
+    // do this because we need to map to new physical addr
     *pte = (uint)*pte & ~PTE_P;
+    // flush tlb
     lcr3(PADDR(getpgdir()));
-    flags = PTE_FLAGS(*pte);
+    // get updated flags
+    uint flags = PTE_FLAGS(*pte);
 
+    // decrease ref_cnt of physical page
     incref((struct run *)pa, -1);
+
+    // alloc a new page
     char *mem;
     if ((mem = kalloc()) == 0)
       cprintf("failed kalloc\n");
+
+    // copy old page into new page
     memmove(mem, (char *)pa, PGSIZE);
 
     cprintf("before trap map\n");
     // if (mappagesHelper(getpgdir(), (void *)(addr - (addr % PGSIZE)), PGSIZE, PADDR(mem), flags) < 0)
     //   goto bad;
+
+    // map pt entry to new page that we just allocd
     if (mappagesHelper(getpgdir(), (void *)(addr), PGSIZE, PADDR(mem), flags) < 0)
     {
       cprintf("bad\n");
