@@ -141,11 +141,13 @@ void trap(struct trapframe *tf)
     //   goto bad;
 
     // map pt entry to new page that we just allocd
-    if (mappagesHelper(getpgdir(), (void *)(addr), PGSIZE, PADDR(mem), flags) < 0)
-    {
-      cprintf("bad\n");
-      freevm(getpgdir());
-    }
+    // if (mappagesHelper(getpgdir(), (void *)(addr), PGSIZE, PADDR(mem), flags) < 0)
+    // {
+    //   cprintf("bad\n");
+    //   freevm(getpgdir());
+    // }
+
+    *pte = (uint)mem | flags | PTE_P;
 
     cprintf("after trap map\n");
 

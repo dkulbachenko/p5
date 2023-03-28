@@ -90,6 +90,7 @@ mappages(pde_t *pgdir, void *la, uint size, uint pa, int perm)
     if (pte == 0)
       return -1;
     if (*pte & PTE_P)
+      // cprintf("remap\n");
       panic("remap");
     *pte = pa | perm | PTE_P;
     if (a == last)
