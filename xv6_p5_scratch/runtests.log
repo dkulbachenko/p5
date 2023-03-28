@@ -60,122 +60,20 @@ gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-
 gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/ide.o kernel/ide.c
 gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/ioapic.o kernel/ioapic.c
 gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/kalloc.o kernel/kalloc.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/kbd.o kernel/kbd.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/lapic.o kernel/lapic.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/main.o kernel/main.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/mp.o kernel/mp.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/pipe.o kernel/pipe.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/proc.o kernel/proc.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/spinlock.o kernel/spinlock.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/syscall.o kernel/syscall.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/sysfile.o kernel/sysfile.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/sysproc.o kernel/sysproc.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/timer.o kernel/timer.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/trap.o kernel/trap.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/uart.o kernel/uart.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/vm.o kernel/vm.c
-ld  -m    elf_i386 -nostdlib --omagic \
-	--section-start=.text=0x100000 --entry=main --output=kernel/kernel \
-	kernel/multiboot.o kernel/data.o kernel/bio.o kernel/console.o kernel/exec.o kernel/file.o kernel/fs.o kernel/ide.o kernel/ioapic.o kernel/kalloc.o kernel/kbd.o kernel/lapic.o kernel/main.o kernel/mp.o kernel/picirq.o kernel/pipe.o kernel/proc.o kernel/spinlock.o kernel/string.o kernel/swtch.o kernel/syscall.o kernel/sysfile.o kernel/sysproc.o kernel/timer.o kernel/trapasm.o kernel/trap.o kernel/uart.o kernel/vectors.o kernel/vm.o \
-	-b binary initcode bootother
-dd if=/dev/zero of=xv6.img count=10000
-10000+0 records in
-10000+0 records out
-5120000 bytes (5.1 MB, 4.9 MiB) copied, 0.00950909 s, 538 MB/s
-dd if=kernel/bootblock of=xv6.img conv=notrunc
-1+0 records in
-1+0 records out
-512 bytes copied, 4.1707e-05 s, 12.3 MB/s
-dd if=kernel/kernel of=xv6.img seek=1 conv=notrunc
-278+1 records in
-278+1 records out
-142700 bytes (143 kB, 139 KiB) copied, 0.000345968 s, 412 MB/s
+kernel/kalloc.c: In function ‘incref’:
+kernel/kalloc.c:100:3: error: too many arguments to function ‘panic’
+  100 |   panic("incrementing ref count of page %d\n", (uint)page / PGSIZE);
+      |   ^~~~~
+In file included from kernel/kalloc.c:6:
+kernel/defs.h:25:6: note: declared here
+   25 | void panic(char *) __attribute__((noreturn));
+      |      ^~~~~
+make: *** [kernel/makefile.mk:132: kernel/kalloc.o] Error 1
 
 
-test build PASSED
+test build FAILED
  (build xv6 using make)
+ make failed (error 2)
 
-starting test_1
-
-**********************************************************************
-
-Test test_1
-Test to make sure that the number of free pages is greater than 0
-
-**********************************************************************
-Running xv6 user progam /home/cs537-1/tests/P5/ctests/test_1.c
-Trying to build project using make
-make
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG user/tester.c -MF user/tester.d -MT user/tester.d -MT user/tester.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o user/tester.o user/tester.c
-ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x0 --output=user/bin/tester user/tester.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
-cp user/bin/tester fs/tester
-./tools/mkfs fs.img fs
-used 29 (bit 1 ninode 26) free 29 total 1024
-grep
-usertests
-init
-rm
-echo
-forktest
-ln
-mkdir
-stressfs
-zombie
-ls
-tester
-wc
-sh
-kill
-cat
-README
-balloc: first 454 blocks have been allocated
-balloc: write bitmap block at sector 28
-rm user/bin/tester
-make qemu-nox 
-Ctrl+a h for help
-timeout --foreground --preserve-status 900 /p/course/cs537-remzi/ta/tools/qemu -nographic -hdb fs.img xv6.img -smp 1
-WARNING: Image format was not specified for 'fs.img' and probing guessed raw.
-         Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
-         Specify the 'raw' format explicitly to remove the restrictions.
-WARNING: Image format was not specified for 'xv6.img' and probing guessed raw.
-         Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
-         Specify the 'raw' format explicitly to remove the restrictions.
-c[?7l[2J[0mSeaBIOS (version 1.15.0-1)
-
-
-iPXE (https://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+07F8B4A0+07ECB4A0 CA00
-Press Ctrl-B to configure iPXE (PCI 00:03.0)...                                                                               
-
-
-Booting from Hard Disk..xv6...
-cpu0: starting
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-init: starting sh
-before vm map
-after vm map
-before vm map
-after vm map
-zombie!
-init: starting sh
-before vm map
-after vm map
-before vm map
-after vm map
-before trap map
-cpu0: panic: remap
- 1075da 107e91 106205 105dd8 0 0 0 0 0 0
+Skipped 10 tests.
+To keep testing after failing a test, use flag '-c' or '--continue'

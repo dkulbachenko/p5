@@ -77,6 +77,7 @@ void trap(struct trapframe *tf)
     break;
   case T_PGFLT:
     // code for handling page fault
+    cprintf("starting pg fault\n");
     uint addr = rcr2();
     int refs = getRefs(addr);
     pte_t *pte;
@@ -96,11 +97,13 @@ void trap(struct trapframe *tf)
     {
       *pte = (uint)*pte | PTE_W;
       lcr3(PADDR(getpgdir()));
+      cprintf("ref count was 1\n");
       break;
     }
     uint pa, flags;
     pa = PTE_ADDR(*pte);
-    // *pte = (uint)*pte | PTE_W; unsure
+    *pte = (uint)*pte | PTE_W;
+    *pte = (uint)*pte & ~PTE_P;
     lcr3(PADDR(getpgdir()));
     flags = PTE_FLAGS(*pte);
     char *mem;
@@ -117,6 +120,7 @@ void trap(struct trapframe *tf)
     cprintf("after trap map\n");
 
   bad:
+    cprintf("bad\n");
     freevm(getpgdir());
 
     break;

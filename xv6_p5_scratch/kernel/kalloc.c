@@ -97,6 +97,7 @@ kalloc(void)
 void incref(struct run *page, int amount)
 {
   acquire(&kmem.lock);
+  // panic("incrementing ref count of page\n");
   kmem.ref_cnt[(uint)page / PGSIZE] += amount;
   page->refcount += amount;
   release(&kmem.lock);
