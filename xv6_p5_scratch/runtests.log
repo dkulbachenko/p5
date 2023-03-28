@@ -9,71 +9,8 @@ build xv6 using make
 Trying to build project using make
 make
 gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/vm.c -MF kernel/vm.d -MT kernel/vm.d -MT kernel/vm.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/uart.c -MF kernel/uart.d -MT kernel/uart.d -MT kernel/uart.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/trap.c -MF kernel/trap.d -MT kernel/trap.d -MT kernel/trap.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/timer.c -MF kernel/timer.d -MT kernel/timer.d -MT kernel/timer.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/sysproc.c -MF kernel/sysproc.d -MT kernel/sysproc.d -MT kernel/sysproc.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/sysfile.c -MF kernel/sysfile.d -MT kernel/sysfile.d -MT kernel/sysfile.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/syscall.c -MF kernel/syscall.d -MT kernel/syscall.d -MT kernel/syscall.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/spinlock.c -MF kernel/spinlock.d -MT kernel/spinlock.d -MT kernel/spinlock.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/proc.c -MF kernel/proc.d -MT kernel/proc.d -MT kernel/proc.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/pipe.c -MF kernel/pipe.d -MT kernel/pipe.d -MT kernel/pipe.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/mp.c -MF kernel/mp.d -MT kernel/mp.d -MT kernel/mp.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/main.c -MF kernel/main.d -MT kernel/main.d -MT kernel/main.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/lapic.c -MF kernel/lapic.d -MT kernel/lapic.d -MT kernel/lapic.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/kbd.c -MF kernel/kbd.d -MT kernel/kbd.d -MT kernel/kbd.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
 	-M -MG kernel/kalloc.c -MF kernel/kalloc.d -MT kernel/kalloc.d -MT kernel/kalloc.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/ioapic.c -MF kernel/ioapic.d -MT kernel/ioapic.d -MT kernel/ioapic.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/ide.c -MF kernel/ide.d -MT kernel/ide.d -MT kernel/ide.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/fs.c -MF kernel/fs.d -MT kernel/fs.d -MT kernel/fs.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/file.c -MF kernel/file.d -MT kernel/file.d -MT kernel/file.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/exec.c -MF kernel/exec.d -MT kernel/exec.d -MT kernel/exec.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/console.c -MF kernel/console.d -MT kernel/console.d -MT kernel/console.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/bio.c -MF kernel/bio.d -MT kernel/bio.d -MT kernel/bio.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/bio.o kernel/bio.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/console.o kernel/console.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/exec.o kernel/exec.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/file.o kernel/file.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/fs.o kernel/fs.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/ide.o kernel/ide.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/ioapic.o kernel/ioapic.c
 gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/kalloc.o kernel/kalloc.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/kbd.o kernel/kbd.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/lapic.o kernel/lapic.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/main.o kernel/main.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/mp.o kernel/mp.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/pipe.o kernel/pipe.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/proc.o kernel/proc.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/spinlock.o kernel/spinlock.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/syscall.o kernel/syscall.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/sysfile.o kernel/sysfile.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/sysproc.o kernel/sysproc.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/timer.o kernel/timer.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/trap.o kernel/trap.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/uart.o kernel/uart.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/vm.o kernel/vm.c
 ld  -m    elf_i386 -nostdlib --omagic \
 	--section-start=.text=0x100000 --entry=main --output=kernel/kernel \
 	kernel/multiboot.o kernel/data.o kernel/bio.o kernel/console.o kernel/exec.o kernel/file.o kernel/fs.o kernel/ide.o kernel/ioapic.o kernel/kalloc.o kernel/kbd.o kernel/lapic.o kernel/main.o kernel/mp.o kernel/picirq.o kernel/pipe.o kernel/proc.o kernel/spinlock.o kernel/string.o kernel/swtch.o kernel/syscall.o kernel/sysfile.o kernel/sysproc.o kernel/timer.o kernel/trapasm.o kernel/trap.o kernel/uart.o kernel/vectors.o kernel/vm.o \
@@ -81,15 +18,15 @@ ld  -m    elf_i386 -nostdlib --omagic \
 dd if=/dev/zero of=xv6.img count=10000
 10000+0 records in
 10000+0 records out
-5120000 bytes (5.1 MB, 4.9 MiB) copied, 0.00967921 s, 529 MB/s
+5120000 bytes (5.1 MB, 4.9 MiB) copied, 0.0115886 s, 442 MB/s
 dd if=kernel/bootblock of=xv6.img conv=notrunc
 1+0 records in
 1+0 records out
-512 bytes copied, 4.0999e-05 s, 12.5 MB/s
+512 bytes copied, 5.5336e-05 s, 9.3 MB/s
 dd if=kernel/kernel of=xv6.img seek=1 conv=notrunc
 278+1 records in
 278+1 records out
-142636 bytes (143 kB, 139 KiB) copied, 0.000254668 s, 560 MB/s
+142652 bytes (143 kB, 139 KiB) copied, 0.000318382 s, 448 MB/s
 
 
 test build PASSED
@@ -180,10 +117,6 @@ freed page with pa 16662528
 Decrement refcount from 1
 freed page with pa 16711680
 init: starting sh
-before vm map
-after vm map
-before vm map
-after vm map
 starting pg fault
 starting pg fault
 ref count of pa 16596992 was 1
@@ -218,12 +151,6 @@ Decrement refcount from 1
 freed page with pa 16662528
 $ tester
 tester
-before vm map
-after vm map
-before vm map
-after vm map
-before vm map
-after vm map
 starting pg fault
 starting pg fault
 ref count of pa 16527360 was 1
@@ -366,10 +293,6 @@ freed page with pa 16662528
 Decrement refcount from 1
 freed page with pa 16711680
 init: starting sh
-before vm map
-after vm map
-before vm map
-after vm map
 starting pg fault
 starting pg fault
 ref count of pa 16596992 was 1
@@ -404,12 +327,6 @@ Decrement refcount from 1
 freed page with pa 16662528
 $ tester
 tester
-before vm map
-after vm map
-before vm map
-after vm map
-before vm map
-after vm map
 starting pg fault
 starting pg fault
 ref count of pa 16527360 was 1
@@ -552,10 +469,6 @@ freed page with pa 16662528
 Decrement refcount from 1
 freed page with pa 16711680
 init: starting sh
-before vm map
-after vm map
-before vm map
-after vm map
 starting pg fault
 starting pg fault
 ref count of pa 16596992 was 1
@@ -590,12 +503,6 @@ Decrement refcount from 1
 freed page with pa 16662528
 $ tester
 tester
-before vm map
-after vm map
-before vm map
-after vm map
-before vm map
-after vm map
 starting pg fault
 starting pg fault
 ref count of pa 16527360 was 1
@@ -647,26 +554,6 @@ Decrement refcount from 1
 freed page with pa 16596992
 Decrement refcount from 1
 freed page with pa 16658432
-before vm map
-after vm map
-before vm map
-after vm map
-before vm map
-after vm map
-before vm map
-after vm map
-before vm map
-after vm map
-before vm map
-after vm map
-before vm map
-after vm map
-before vm map
-after vm map
-before vm map
-after vm map
-before vm map
-after vm map
 starting pg fault
 starting pg fault
 ref count of pa 16424960 was 1
@@ -3871,3 +3758,106 @@ starting pg fault
 ref count of pa 16695296 was 1
 starting pg fault
 ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+starting pg fault
+ref count of pa 16695296 was 1
+st

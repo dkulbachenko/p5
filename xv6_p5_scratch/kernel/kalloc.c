@@ -40,6 +40,7 @@ void kinit(void)
   p = (char *)PGROUNDUP((uint)end);
   for (; p + PGSIZE <= (char *)PHYSTOP; p += PGSIZE)
   {
+    kmem.ref_cnt[(uint)p / PGSIZE] = 0;
     kfree(p);
     num++;
   }

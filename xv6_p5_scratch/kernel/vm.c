@@ -367,10 +367,10 @@ pde_t *cowuvm(pde_t *pgdir, uint sz)
     // memmove(mem, (char *)pa, PGSIZE);
 
     // map old page into new proc's pt
-    cprintf("before vm map\n");
+    // cprintf("before vm map\n");
     if (mappages(d, (void *)i, PGSIZE, PADDR(pa), flags) < 0)
       goto bad;
-    cprintf("after vm map\n");
+    // cprintf("after vm map\n");
   }
 
   return d;
