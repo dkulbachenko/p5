@@ -5,6 +5,7 @@
 #include "mmu.h"
 #include "proc.h"
 #include "elf.h"
+#include "kalloc.h"
 
 extern char data[]; // defined in data.S
 
@@ -329,14 +330,47 @@ bad:
   return 0;
 }
 
-// pde_t *cowuvm(pde_t *pgdir, uint sz)
-// {
-//   // set to read only
+pde_t *cowuvm(pde_t *pgdir, uint sz)
+{
+  // set to read only
 
-//   // increase ref count
+  // increase ref count
+  pde_t *d;
+  pte_t *pte;
+  uint pa, i, flags;
+  // char *mem;
 
-//   return;
-// }
+  if ((d = setupkvm()) == 0)
+    return 0;
+  for (i = 0; i < sz; i += PGSIZE)
+  {
+    if ((pte = walkpgdir(pgdir, (void *)i, 0)) == 0)
+      panic("copyuvm: pte should exist");
+    if (!(*pte & PTE_P))
+      panic("copyuvm: page not present");
+    pa = PTE_ADDR(*pte);
+
+    *pte = (uint)*pte & ~PTE_W;
+    flags = PTE_FLAGS(*pte);
+    incref((struct run *)i, 1);
+    lcr3(PADDR(pgdir));
+
+    // don't include kalloc
+    // if ((mem = kalloc()) == 0)
+    //   goto bad;
+    // memmove(mem, (char *)pa, PGSIZE);
+    cprintf("before vm map\n");
+    if (mappages(d, (void *)i, PGSIZE, PADDR(pa), flags) < 0)
+      goto bad;
+    cprintf("after vm map\n");
+  }
+
+  return d;
+
+bad:
+  freevm(d);
+  return 0;
+}
 
 // Map user virtual address to kernel physical address.
 char *
@@ -376,4 +410,14 @@ int copyout(pde_t *pgdir, uint va, void *p, uint len)
     va = va0 + PGSIZE;
   }
   return 0;
+}
+
+int mappagesHelper(pde_t *pgdir, void *la, uint size, uint pa, int perm)
+{
+  return mappages(pgdir, la, size, pa, perm);
+}
+
+pte_t *walkpgdirHelper(pde_t *pgdir, const void *va, int create)
+{
+  return walkpgdir(pgdir, va, create);
 }

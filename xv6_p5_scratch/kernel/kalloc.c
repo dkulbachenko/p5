@@ -7,6 +7,7 @@
 #include "param.h"
 #include "mmu.h"
 #include "spinlock.h"
+#include "kalloc.h"
 
 struct run
 {
@@ -37,7 +38,8 @@ void kinit(void)
 
   initlock(&kmem.lock, "kmem");
   p = (char *)PGROUNDUP((uint)end);
-  for (; p + PGSIZE <= (char *)PHYSTOP; p += PGSIZE){
+  for (; p + PGSIZE <= (char *)PHYSTOP; p += PGSIZE)
+  {
     kfree(p);
     num++;
   }
@@ -83,7 +85,7 @@ kalloc(void)
   if (r)
   {
     kmem.freelist = r->next;
-    kmem.ref_cnt[(uint)r/PGSIZE] = 1;
+    kmem.ref_cnt[(uint)r / PGSIZE] = 1;
     kmem.free_pages--;
     r->refcount = 1;
   }
@@ -95,7 +97,7 @@ kalloc(void)
 void incref(struct run *page, int amount)
 {
   acquire(&kmem.lock);
-  kmem.ref_cnt[(uint)page/PGSIZE] += amount;
+  kmem.ref_cnt[(uint)page / PGSIZE] += amount;
   page->refcount += amount;
   release(&kmem.lock);
 }
@@ -103,4 +105,9 @@ void incref(struct run *page, int amount)
 int helpFreePages(void)
 {
   return (int)kmem.free_pages;
+}
+
+int getRefs(uint addr)
+{
+  return kmem.ref_cnt[addr / PGSIZE];
 }

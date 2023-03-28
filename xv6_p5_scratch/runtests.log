@@ -8,18 +8,88 @@ build xv6 using make
 **********************************************************************
 Trying to build project using make
 make
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/vm.c -MF kernel/vm.d -MT kernel/vm.d -MT kernel/vm.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/uart.c -MF kernel/uart.d -MT kernel/uart.d -MT kernel/uart.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/trap.c -MF kernel/trap.d -MT kernel/trap.d -MT kernel/trap.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/timer.c -MF kernel/timer.d -MT kernel/timer.d -MT kernel/timer.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/sysproc.c -MF kernel/sysproc.d -MT kernel/sysproc.d -MT kernel/sysproc.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/sysfile.c -MF kernel/sysfile.d -MT kernel/sysfile.d -MT kernel/sysfile.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/syscall.c -MF kernel/syscall.d -MT kernel/syscall.d -MT kernel/syscall.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/spinlock.c -MF kernel/spinlock.d -MT kernel/spinlock.d -MT kernel/spinlock.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/proc.c -MF kernel/proc.d -MT kernel/proc.d -MT kernel/proc.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/pipe.c -MF kernel/pipe.d -MT kernel/pipe.d -MT kernel/pipe.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/mp.c -MF kernel/mp.d -MT kernel/mp.d -MT kernel/mp.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/main.c -MF kernel/main.d -MT kernel/main.d -MT kernel/main.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/lapic.c -MF kernel/lapic.d -MT kernel/lapic.d -MT kernel/lapic.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/kbd.c -MF kernel/kbd.d -MT kernel/kbd.d -MT kernel/kbd.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/kalloc.c -MF kernel/kalloc.d -MT kernel/kalloc.d -MT kernel/kalloc.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/ioapic.c -MF kernel/ioapic.d -MT kernel/ioapic.d -MT kernel/ioapic.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/ide.c -MF kernel/ide.d -MT kernel/ide.d -MT kernel/ide.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/fs.c -MF kernel/fs.d -MT kernel/fs.d -MT kernel/fs.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/file.c -MF kernel/file.d -MT kernel/file.d -MT kernel/file.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/exec.c -MF kernel/exec.d -MT kernel/exec.d -MT kernel/exec.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/console.c -MF kernel/console.d -MT kernel/console.d -MT kernel/console.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
+	-M -MG kernel/bio.c -MF kernel/bio.d -MT kernel/bio.d -MT kernel/bio.o
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/bio.o kernel/bio.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/console.o kernel/console.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/exec.o kernel/exec.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/file.o kernel/file.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/fs.o kernel/fs.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/ide.o kernel/ide.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/ioapic.o kernel/ioapic.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/kalloc.o kernel/kalloc.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/kbd.o kernel/kbd.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/lapic.o kernel/lapic.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/main.o kernel/main.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/mp.o kernel/mp.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/pipe.o kernel/pipe.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/proc.o kernel/proc.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/spinlock.o kernel/spinlock.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/syscall.o kernel/syscall.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/sysfile.o kernel/sysfile.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/sysproc.o kernel/sysproc.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/timer.o kernel/timer.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/trap.o kernel/trap.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/uart.o kernel/uart.c
+gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/vm.o kernel/vm.c
+ld  -m    elf_i386 -nostdlib --omagic \
+	--section-start=.text=0x100000 --entry=main --output=kernel/kernel \
+	kernel/multiboot.o kernel/data.o kernel/bio.o kernel/console.o kernel/exec.o kernel/file.o kernel/fs.o kernel/ide.o kernel/ioapic.o kernel/kalloc.o kernel/kbd.o kernel/lapic.o kernel/main.o kernel/mp.o kernel/picirq.o kernel/pipe.o kernel/proc.o kernel/spinlock.o kernel/string.o kernel/swtch.o kernel/syscall.o kernel/sysfile.o kernel/sysproc.o kernel/timer.o kernel/trapasm.o kernel/trap.o kernel/uart.o kernel/vectors.o kernel/vm.o \
+	-b binary initcode bootother
 dd if=/dev/zero of=xv6.img count=10000
 10000+0 records in
 10000+0 records out
-5120000 bytes (5.1 MB, 4.9 MiB) copied, 0.00941148 s, 544 MB/s
+5120000 bytes (5.1 MB, 4.9 MiB) copied, 0.00950909 s, 538 MB/s
 dd if=kernel/bootblock of=xv6.img conv=notrunc
 1+0 records in
 1+0 records out
-512 bytes copied, 5.4566e-05 s, 9.4 MB/s
+512 bytes copied, 4.1707e-05 s, 12.3 MB/s
 dd if=kernel/kernel of=xv6.img seek=1 conv=notrunc
-267+1 records in
-267+1 records out
-137104 bytes (137 kB, 134 KiB) copied, 0.000272504 s, 503 MB/s
+278+1 records in
+278+1 records out
+142700 bytes (143 kB, 139 KiB) copied, 0.000345968 s, 412 MB/s
 
 
 test build PASSED
@@ -96,431 +166,16 @@ WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
 WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
 WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
 init: starting sh
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-$ tester
-tester
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-XV6_COW	 SUCCESS
-
-
-test test_1 PASSED (1 of 1)
- (Test to make sure that the number of free pages is greater than 0)
-
-starting test_2
-
-**********************************************************************
-
-Test test_2
-Test that sbrk() reduces the number of free pages
-
-**********************************************************************
-Running xv6 user progam /home/cs537-1/tests/P5/ctests/test_2.c
-Trying to build project using make
-make
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG user/tester.c -MF user/tester.d -MT user/tester.d -MT user/tester.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o user/tester.o user/tester.c
-ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x0 --output=user/bin/tester user/tester.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
-cp user/bin/tester fs/tester
-./tools/mkfs fs.img fs
-used 29 (bit 1 ninode 26) free 29 total 1024
-grep
-usertests
-init
-rm
-echo
-forktest
-ln
-mkdir
-stressfs
-zombie
-ls
-tester
-wc
-sh
-kill
-cat
-README
-balloc: first 455 blocks have been allocated
-balloc: write bitmap block at sector 28
-rm user/bin/tester
-make qemu-nox 
-Ctrl+a h for help
-timeout --foreground --preserve-status 900 /p/course/cs537-remzi/ta/tools/qemu -nographic -hdb fs.img xv6.img -smp 1
-WARNING: Image format was not specified for 'fs.img' and probing guessed raw.
-         Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
-         Specify the 'raw' format explicitly to remove the restrictions.
-WARNING: Image format was not specified for 'xv6.img' and probing guessed raw.
-         Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
-         Specify the 'raw' format explicitly to remove the restrictions.
-c[?7l[2J[0mSeaBIOS (version 1.15.0-1)
-
-
-iPXE (https://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+07F8B4A0+07ECB4A0 CA00
-Press Ctrl-B to configure iPXE (PCI 00:03.0)...                                                                               
-
-
-Booting from Hard Disk..xv6...
-cpu0: starting
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
+before vm map
+after vm map
+before vm map
+after vm map
+zombie!
 init: starting sh
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-$ tester
-tester
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-XV6_COW	 SUCCESS
-
-
-test test_2 PASSED (1 of 1)
- (Test that sbrk() reduces the number of free pages)
-
-starting test_3
-
-**********************************************************************
-
-Test test_3
-Test that pages are copied on write and that the parent values are not affected by the child
-
-**********************************************************************
-Running xv6 user progam /home/cs537-1/tests/P5/ctests/test_3.c
-Trying to build project using make
-make
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG user/tester.c -MF user/tester.d -MT user/tester.d -MT user/tester.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o user/tester.o user/tester.c
-ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x0 --output=user/bin/tester user/tester.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
-cp user/bin/tester fs/tester
-./tools/mkfs fs.img fs
-used 29 (bit 1 ninode 26) free 29 total 1024
-grep
-usertests
-init
-rm
-echo
-forktest
-ln
-mkdir
-stressfs
-zombie
-ls
-tester
-wc
-sh
-kill
-cat
-README
-balloc: first 456 blocks have been allocated
-balloc: write bitmap block at sector 28
-rm user/bin/tester
-make qemu-nox 
-Ctrl+a h for help
-timeout --foreground --preserve-status 900 /p/course/cs537-remzi/ta/tools/qemu -nographic -hdb fs.img xv6.img -smp 1
-WARNING: Image format was not specified for 'fs.img' and probing guessed raw.
-         Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
-         Specify the 'raw' format explicitly to remove the restrictions.
-WARNING: Image format was not specified for 'xv6.img' and probing guessed raw.
-         Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
-         Specify the 'raw' format explicitly to remove the restrictions.
-c[?7l[2J[0mSeaBIOS (version 1.15.0-1)
-
-
-iPXE (https://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+07F8B4A0+07ECB4A0 CA00
-Press Ctrl-B to configure iPXE (PCI 00:03.0)...                                                                               
-
-
-Booting from Hard Disk..xv6...
-cpu0: starting
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-init: starting sh
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-$ tester
-tester
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-XV6_COW	 SUCCESS
-
-
-test test_3 PASSED (1 of 1)
- (Test that pages are copied on write and that the parent values are not affected by the child)
-
-starting test_4
-
-**********************************************************************
-
-Test test_4
-Test that all pages are not copied when process forks - 1
-
-**********************************************************************
-Running xv6 user progam /home/cs537-1/tests/P5/ctests/test_4.c
-Trying to build project using make
-make
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG user/tester.c -MF user/tester.d -MT user/tester.d -MT user/tester.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o user/tester.o user/tester.c
-ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x0 --output=user/bin/tester user/tester.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
-cp user/bin/tester fs/tester
-./tools/mkfs fs.img fs
-used 29 (bit 1 ninode 26) free 29 total 1024
-grep
-usertests
-init
-rm
-echo
-forktest
-ln
-mkdir
-stressfs
-zombie
-ls
-tester
-wc
-sh
-kill
-cat
-README
-balloc: first 455 blocks have been allocated
-balloc: write bitmap block at sector 28
-rm user/bin/tester
-make qemu-nox 
-Ctrl+a h for help
-timeout --foreground --preserve-status 900 /p/course/cs537-remzi/ta/tools/qemu -nographic -hdb fs.img xv6.img -smp 1
-WARNING: Image format was not specified for 'fs.img' and probing guessed raw.
-         Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
-         Specify the 'raw' format explicitly to remove the restrictions.
-WARNING: Image format was not specified for 'xv6.img' and probing guessed raw.
-         Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
-         Specify the 'raw' format explicitly to remove the restrictions.
-c[?7l[2J[0mSeaBIOS (version 1.15.0-1)
-
-
-iPXE (https://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+07F8B4A0+07ECB4A0 CA00
-Press Ctrl-B to configure iPXE (PCI 00:03.0)...                                                                               
-
-
-Booting from Hard Disk..xv6...
-cpu0: starting
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-init: starting sh
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-$ tester
-tester
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
-XV6_COW	 FAILED
-
-
-test test_4 FAILED (0 of 1)
- (Test that all pages are not copied when process forks - 1)
- tester failed
-
-Skipped 6 tests.
-To keep testing after failing a test, use flag '-c' or '--continue'
+before vm map
+after vm map
+before vm map
+after vm map
+before trap map
+cpu0: panic: remap
+ 1075da 107e91 106205 105dd8 0 0 0 0 0 0
