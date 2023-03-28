@@ -8,28 +8,18 @@ build xv6 using make
 **********************************************************************
 Trying to build project using make
 make
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/sysproc.c -MF kernel/sysproc.d -MT kernel/sysproc.d -MT kernel/sysproc.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-	-M -MG kernel/kalloc.c -MF kernel/kalloc.d -MT kernel/kalloc.d -MT kernel/kalloc.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/kalloc.o kernel/kalloc.c
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o kernel/sysproc.o kernel/sysproc.c
-ld  -m    elf_i386 -nostdlib --omagic \
-	--section-start=.text=0x100000 --entry=main --output=kernel/kernel \
-	kernel/multiboot.o kernel/data.o kernel/bio.o kernel/console.o kernel/exec.o kernel/file.o kernel/fs.o kernel/ide.o kernel/ioapic.o kernel/kalloc.o kernel/kbd.o kernel/lapic.o kernel/main.o kernel/mp.o kernel/picirq.o kernel/pipe.o kernel/proc.o kernel/spinlock.o kernel/string.o kernel/swtch.o kernel/syscall.o kernel/sysfile.o kernel/sysproc.o kernel/timer.o kernel/trapasm.o kernel/trap.o kernel/uart.o kernel/vectors.o kernel/vm.o \
-	-b binary initcode bootother
 dd if=/dev/zero of=xv6.img count=10000
 10000+0 records in
 10000+0 records out
-5120000 bytes (5.1 MB, 4.9 MiB) copied, 0.00959191 s, 534 MB/s
+5120000 bytes (5.1 MB, 4.9 MiB) copied, 0.00941148 s, 544 MB/s
 dd if=kernel/bootblock of=xv6.img conv=notrunc
 1+0 records in
 1+0 records out
-512 bytes copied, 4.1055e-05 s, 12.5 MB/s
+512 bytes copied, 5.4566e-05 s, 9.4 MB/s
 dd if=kernel/kernel of=xv6.img seek=1 conv=notrunc
 267+1 records in
 267+1 records out
-137100 bytes (137 kB, 134 KiB) copied, 0.000280131 s, 489 MB/s
+137104 bytes (137 kB, 134 KiB) copied, 0.000272504 s, 503 MB/s
 
 
 test build PASSED
@@ -53,23 +43,23 @@ ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x0 --o
 cp user/bin/tester fs/tester
 ./tools/mkfs fs.img fs
 used 29 (bit 1 ninode 26) free 29 total 1024
+grep
+usertests
+init
+rm
+echo
+forktest
 ln
 mkdir
-wc
 stressfs
-echo
-rm
-kill
-cat
 zombie
-grep
 ls
 tester
-init
-README
-usertests
+wc
 sh
-forktest
+kill
+cat
+README
 balloc: first 454 blocks have been allocated
 balloc: write bitmap block at sector 28
 rm user/bin/tester
@@ -149,6 +139,7 @@ WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
 WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1
 XV6_COW	 SUCCESS
 
+
 test test_1 PASSED (1 of 1)
  (Test to make sure that the number of free pages is greater than 0)
 
@@ -170,23 +161,23 @@ ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x0 --o
 cp user/bin/tester fs/tester
 ./tools/mkfs fs.img fs
 used 29 (bit 1 ninode 26) free 29 total 1024
+grep
+usertests
+init
+rm
+echo
+forktest
 ln
 mkdir
-wc
 stressfs
-echo
-rm
-kill
-cat
 zombie
-grep
 ls
 tester
-init
-README
-usertests
+wc
 sh
-forktest
+kill
+cat
+README
 balloc: first 455 blocks have been allocated
 balloc: write bitmap block at sector 28
 rm user/bin/tester
@@ -288,23 +279,23 @@ ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x0 --o
 cp user/bin/tester fs/tester
 ./tools/mkfs fs.img fs
 used 29 (bit 1 ninode 26) free 29 total 1024
+grep
+usertests
+init
+rm
+echo
+forktest
 ln
 mkdir
-wc
 stressfs
-echo
-rm
-kill
-cat
 zombie
-grep
 ls
 tester
-init
-README
-usertests
+wc
 sh
-forktest
+kill
+cat
+README
 balloc: first 456 blocks have been allocated
 balloc: write bitmap block at sector 28
 rm user/bin/tester
@@ -430,23 +421,23 @@ ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x0 --o
 cp user/bin/tester fs/tester
 ./tools/mkfs fs.img fs
 used 29 (bit 1 ninode 26) free 29 total 1024
+grep
+usertests
+init
+rm
+echo
+forktest
 ln
 mkdir
-wc
 stressfs
-echo
-rm
-kill
-cat
 zombie
-grep
 ls
 tester
-init
-README
-usertests
+wc
 sh
-forktest
+kill
+cat
+README
 balloc: first 455 blocks have been allocated
 balloc: write bitmap block at sector 28
 rm user/bin/tester

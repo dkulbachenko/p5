@@ -329,14 +329,14 @@ bad:
   return 0;
 }
 
-pde_t *cowuvm(pde_t *pgdir, uint sz)
-{
-  // set to read only
+// pde_t *cowuvm(pde_t *pgdir, uint sz)
+// {
+//   // set to read only
 
-  // increase ref count
+//   // increase ref count
 
-  return;
-}
+//   return;
+// }
 
 // Map user virtual address to kernel physical address.
 char *
