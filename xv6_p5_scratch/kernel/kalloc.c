@@ -12,7 +12,7 @@
 struct run
 {
   struct run *next;
-  uint refcount;
+  // uint refcount;
 };
 
 struct
@@ -63,12 +63,15 @@ void kfree(char *v)
   acquire(&kmem.lock);
 
   r = (struct run *)v;
-  if (r->refcount != 1)
-    cprintf("WARNING: TRYING TO FREE PAGE WITH REFCOUNT != 1\n");
+  if (kmem.ref_cnt[(uint)v / PGSIZE] != 1)
+    cprintf("WARNING: TRYING TO FREE PAGE WITH REFCOUNT %d\n", kmem.ref_cnt[(uint)v / PGSIZE]);
 
   r->next = kmem.freelist;
   kmem.freelist = r;
   kmem.free_pages++;
+
+  kmem.ref_cnt[(uint)v / PGSIZE] = 0;
+
   release(&kmem.lock);
 }
 
@@ -87,7 +90,7 @@ kalloc(void)
     kmem.freelist = r->next;
     kmem.ref_cnt[(uint)r / PGSIZE] = 1;
     kmem.free_pages--;
-    r->refcount = 1;
+    // r->refcount = 1;
   }
 
   release(&kmem.lock);
@@ -99,7 +102,7 @@ void incref(struct run *page, int amount)
   acquire(&kmem.lock);
   // panic("incrementing ref count of page\n");
   kmem.ref_cnt[(uint)page / PGSIZE] += amount;
-  page->refcount += amount;
+  // page->refcount += amount;
   release(&kmem.lock);
 }
 

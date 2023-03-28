@@ -79,14 +79,22 @@ void trap(struct trapframe *tf)
     // code for handling page fault
     cprintf("starting pg fault\n");
     uint addr = rcr2();
-    int refs = getRefs(addr);
+    // int refs = getRefs(addr);
     pte_t *pte;
 
-    if ((pte = walkpgdirHelper(getpgdir(), (void *)(addr - (addr % PGSIZE)), 0)) == 0)
+    if (addr > USERTOP)
     {
       cprintf("CoW: Invalid virtual address\n");
       exit();
     }
+
+    if ((pte = walkpgdirHelper(getpgdir(), (void *)(addr), 0)) == 0)
+    {
+      panic("trap should be in pt\n");
+    }
+
+    uint pa = PTE_ADDR(*pte);
+    int refs = getRefs(pa);
 
     if (refs == 0)
     {
@@ -100,28 +108,30 @@ void trap(struct trapframe *tf)
       cprintf("ref count was 1\n");
       break;
     }
-    uint pa, flags;
-    pa = PTE_ADDR(*pte);
+
+    uint flags;
+
     *pte = (uint)*pte | PTE_W;
     *pte = (uint)*pte & ~PTE_P;
     lcr3(PADDR(getpgdir()));
     flags = PTE_FLAGS(*pte);
+
+    incref((struct run *)pa, -1);
     char *mem;
-    incref((struct run *)addr, -1);
     if ((mem = kalloc()) == 0)
-      goto bad;
+      cprintf("failed kalloc\n");
     memmove(mem, (char *)pa, PGSIZE);
 
     cprintf("before trap map\n");
     // if (mappagesHelper(getpgdir(), (void *)(addr - (addr % PGSIZE)), PGSIZE, PADDR(mem), flags) < 0)
     //   goto bad;
     if (mappagesHelper(getpgdir(), (void *)(addr), PGSIZE, PADDR(mem), flags) < 0)
-      goto bad;
-    cprintf("after trap map\n");
+    {
+      cprintf("bad\n");
+      freevm(getpgdir());
+    }
 
-  bad:
-    cprintf("bad\n");
-    freevm(getpgdir());
+    cprintf("after trap map\n");
 
     break;
   default:

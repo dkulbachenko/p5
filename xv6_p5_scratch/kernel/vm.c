@@ -352,7 +352,7 @@ pde_t *cowuvm(pde_t *pgdir, uint sz)
 
     *pte = (uint)*pte & ~PTE_W;
     flags = PTE_FLAGS(*pte);
-    incref((struct run *)i, 1);
+    incref((struct run *)pa, 1);
     lcr3(PADDR(pgdir));
 
     // don't include kalloc
