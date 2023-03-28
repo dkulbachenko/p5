@@ -63,19 +63,29 @@ void kfree(char *v)
   acquire(&kmem.lock);
 
   r = (struct run *)v;
-  if (kmem.ref_cnt[(uint)v / PGSIZE] > 1)
+  if (kmem.ref_cnt[(uint)v / PGSIZE] > 0)
   {
     cprintf("Decrement refcount from %d\n", kmem.ref_cnt[(uint)v / PGSIZE]);
     kmem.ref_cnt[(uint)v / PGSIZE]--;
   }
-  else
+  // else
+  // {
+  //   if (kmem.ref_cnt[(uint)v / PGSIZE] != 1)
+  //     cprintf("WARNING: TRYING TO FREE PAGE WITH REFCOUNT %d\n", kmem.ref_cnt[(uint)v / PGSIZE]);
+  //   r->next = kmem.freelist;
+  //   kmem.freelist = r;
+  //   kmem.free_pages++;
+  //   cprintf("freed page with pa %d\n", (int)(uint)v);
+  //   kmem.ref_cnt[(uint)v / PGSIZE] = 0;
+  // }
+
+  // free if ref_cnt becomes 0
+  if (kmem.ref_cnt[(uint)v / PGSIZE] == 0)
   {
-    if (kmem.ref_cnt[(uint)v / PGSIZE] != 1)
-      cprintf("WARNING: TRYING TO FREE PAGE WITH REFCOUNT %d\n", kmem.ref_cnt[(uint)v / PGSIZE]);
     r->next = kmem.freelist;
     kmem.freelist = r;
     kmem.free_pages++;
-    kmem.ref_cnt[(uint)v / PGSIZE] = 0;
+    cprintf("freed page with pa %d\n", (int)(uint)v);
   }
 
   release(&kmem.lock);

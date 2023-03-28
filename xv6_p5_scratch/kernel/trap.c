@@ -111,7 +111,7 @@ void trap(struct trapframe *tf)
       *pte = (uint)*pte | PTE_W;
       // flush tlb
       lcr3(PADDR(getpgdir()));
-      cprintf("ref count was 1\n");
+      cprintf("ref count of pa %d was 1\n", (int)(uint)pa);
       break;
     }
 
@@ -121,7 +121,7 @@ void trap(struct trapframe *tf)
     // do this because we need to map to new physical addr
     *pte = (uint)*pte & ~PTE_P;
     // flush tlb
-    lcr3(PADDR(getpgdir()));
+
     // get updated flags
     uint flags = PTE_FLAGS(*pte);
 
@@ -136,7 +136,7 @@ void trap(struct trapframe *tf)
     // copy old page into new page
     memmove(mem, (char *)pa, PGSIZE);
 
-    cprintf("before trap map\n");
+    // cprintf("before trap map\n");
     // if (mappagesHelper(getpgdir(), (void *)(addr - (addr % PGSIZE)), PGSIZE, PADDR(mem), flags) < 0)
     //   goto bad;
 
@@ -148,8 +148,9 @@ void trap(struct trapframe *tf)
     // }
 
     *pte = (uint)mem | flags | PTE_P;
+    lcr3(PADDR(getpgdir()));
 
-    cprintf("after trap map\n");
+    // cprintf("after trap map\n");
 
     break;
   default:
