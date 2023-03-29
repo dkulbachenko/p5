@@ -105,7 +105,6 @@ kalloc(void)
   if (r)
   {
     kmem.freelist = r->next;
-
     // set ref_cnt to 1 and decrease free pages
     kmem.ref_cnt[(uint)r / PGSIZE] = 1;
     kmem.free_pages--;

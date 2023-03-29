@@ -117,10 +117,10 @@ void trap(struct trapframe *tf)
 
     // set to writeable
     *pte = (uint)*pte | PTE_W;
+
     // set to not present
     // do this because we need to map to new physical addr
-    *pte = (uint)*pte & ~PTE_P;
-    // flush tlb
+    // *pte = (uint)*pte & ~PTE_P;
 
     // get updated flags
     uint flags = PTE_FLAGS(*pte);
