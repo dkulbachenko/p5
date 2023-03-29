@@ -177,6 +177,7 @@ int copyout(pde_t *, uint, void *, uint);
 // pte_t *walkpgdir(pde_t *, const void *, int);
 int mappagesHelper(pde_t *, void *, uint, uint, int);
 pte_t *walkpgdirHelper(pde_t *, const void *, int);
+void faultHandler(void);
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x) / sizeof((x)[0]))

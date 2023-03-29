@@ -34,7 +34,7 @@ extern char end[]; // first address after kernel loaded from ELF file
 void kinit(void)
 {
   char *p;
-  int num = 0;
+  // int num = 0;
 
   initlock(&kmem.lock, "kmem");
   p = (char *)PGROUNDUP((uint)end);
@@ -42,9 +42,9 @@ void kinit(void)
   {
     kmem.ref_cnt[(uint)p / PGSIZE] = 0;
     kfree(p);
-    num++;
+    // num++;
   }
-  kmem.free_pages = num;
+  // kmem.free_pages = num;
 }
 
 // Free the page of physical memory pointed at by v,
