@@ -30,21 +30,28 @@ void **merge(void **arr1, void **arr2, int len1, int len2)
         printf("Failed malloc in merge\n");
     }
 
+    printf("len1: %d    len2: %d\n", len1, len2);
+
     // merge arr1 and arr 2
     int index = 0;
     // while both arrs have values
     while (len1 && len2)
     {
         // compare keys
-        if (*(int *)(*arr1) < *(int *)(*arr2))
+        int k1 = *(int *)(arr1[0]);
+        int k2 = *(int *)(arr2[0]);
+        printf("key1: %c, key2: %c\n", k1, k2);
+        if (k1 < k2)
         {
-            *(ret + index) = *arr1;
+            ret[index] = arr1[0];
+            printf("added %c to ret\n", k1);
             arr1++;
             len1--;
         }
         else
         {
-            *(ret + index) = *arr2;
+            ret[index] = arr2[0];
+            printf("added %c to ret\n", k2);
             arr2++;
             len2--;
         }
@@ -54,14 +61,16 @@ void **merge(void **arr1, void **arr2, int len1, int len2)
     // add leftovers
     while (len1)
     {
-        *(ret + index) = *arr1;
+        ret[index] = arr1[0];
+        printf("added %c to ret\n", *(int *)(arr1[0]));
         arr1++;
         len1--;
         index++;
     }
     while (len2)
     {
-        *(ret + index) = *arr2;
+        ret[index] = arr2[0];
+        printf("added %c to ret\n", *(int *)(arr2[0]));
         arr2++;
         len2--;
         index++;
@@ -110,7 +119,7 @@ void *merge_worker(void *input)
     void **arr2 = *inp->subarr2;
 
     // this is definetely questionable
-    *inp->subarr1 = merge(arr1, arr2, len1, len2);
+    *(inp->subarr1) = merge(arr1, arr2, len1, len2);
     return NULL;
 }
 
@@ -148,6 +157,7 @@ int main(int argc, char **argv)
     int oldIndex = 0;
     printf("before splitting\n");
     // split large array and create threads
+    void ***oldptr = NULL;
     for (int i = 0; i < numThreads; i++)
     {
         // assign start of each subarray
@@ -165,7 +175,8 @@ int main(int argc, char **argv)
         // create a struct containing the length and pointer to subarr
         sort_args *args = (sort_args *)malloc(sizeof(sort_args));
         args->len = subLengths[i];
-        args->subarr = &subarrays[i];
+        oldptr = &subarrays[i];
+        args->subarr = &(subarrays[i]);
 
         pthread_create(&threads[i], NULL, sort_worker, (void *)args);
 
@@ -176,6 +187,10 @@ int main(int argc, char **argv)
     for (int i = 0; i < numThreads; i++)
     {
         pthread_join(threads[i], NULL);
+    }
+    if (subarrays[0] == *oldptr)
+    {
+        printf("pointer didn't get updated\n");
     }
 
     printf("after sort join\n");
