@@ -7,7 +7,6 @@
 #include <fcntl.h>
 #include <string.h>
 
-
 typedef struct sort_args
 {
     int *len;
@@ -111,35 +110,33 @@ void *merge_worker(void *input)
     *inp->subarr1 = merge(arr1, arr2, len1, len2);
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-    int file_pointer; // file pointer
-    struct stat file_status;  // file status 
-    if (argc != 4 ){
+    int file_pointer;        // file pointer
+    struct stat file_status; // file status
+    if (argc != 4)
+    {
         exit(1);
     }
-    char* input_name = argv[1];
-    char* output_name = argv[2];
+    char *input_name = argv[1];
+    char *output_name = argv[2];
     file_pointer = open(argv[1], O_RDONLY);
     fstat(file_pointer, &file_status);
-    char* file_content = mmap(NULL, file_status.st_size, PROT_READ, MAP_PRIVATE, file_pointer, 0);
-    
-    // use this one to iterate
-    char* file_content_tmp = strdup(file_content);
+    char *file_content = mmap(NULL, file_status.st_size, PROT_READ, MAP_PRIVATE, file_pointer, 0);
 
-
-
-    // ****IO AND INPUT PROCESSING GOES HERE****
-    void **entries; // list of 100 byte entries from mmap
-    int filesize = 1000000;
+    // get number of entries and fill entries with proper values
+    int num_entries = file_status.st_size / 100;
+    void **entries = malloc(sizeof(void *) * num_entries);
+    // every 100 bytes is the next entry
+    for (int i = 0; i < num_entries; i++)
+        entries[i] = file_content + (i * 100);
     int numThreads = atoi(argv[3]); // the third element
+    // done processing arguments and file
 
-    // ****END IO AND INPUT PROCESSING****
-
+    // begin actual main function
     pthread_t threads[numThreads];
 
-    int numEntries = filesize / 100;
-    int extra = numEntries % numThreads;
+    int extra = num_entries % numThreads;
 
     void **subarrays[numThreads];
     int subLengths[numThreads];
@@ -151,7 +148,7 @@ int main(int argc, char** argv)
     {
         // assign start of each subarray
         subarrays[i] = entries + index;
-        index += numEntries / numThreads;
+        index += num_entries / numThreads;
         // add additional entries if it doesn't divide cleanly
         if (extra > 0)
         {
