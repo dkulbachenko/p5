@@ -17,12 +17,79 @@ typedef struct merge_args
     void ***subarr2;
 } merge_args;
 
+// merges the two input arrays
+void **merge(void **arr1, void **arr2, int len1, int len2)
+{
+    void **ret = malloc(sizeof(void *) * (len1 + len2));
+    if (ret == NULL)
+    {
+        printf("Failed malloc in merge\n");
+    }
+
+    // merge arr1 and arr 2
+    int index = 0;
+    // while both arrs have values
+    while (len1 && len2)
+    {
+        // compare keys
+        if (*(int *)(*arr1) < *(int *)(*arr2))
+        {
+            *(ret + index) = *arr1;
+            arr1++;
+            len1--;
+        }
+        else
+        {
+            *(ret + index) = *arr2;
+            arr2++;
+            len2--;
+        }
+        index++;
+    }
+
+    // add leftovers
+    while (len1)
+    {
+        *(ret + index) = *arr1;
+        arr1++;
+        len1--;
+        index++;
+    }
+    while (len2)
+    {
+        *(ret + index) = *arr2;
+        arr1++;
+        len2--;
+        index++;
+    }
+
+    // free arr 1 and 2 here?
+
+    return ret;
+}
+
+// returns arr in ascending order using merge sort
+void **sort_helper(void **arr, int length)
+{
+
+    if (length == 1)
+        return arr;
+
+    int len1 = length / 2;
+    int len2 = length - len1;
+    // call recrusive
+    void **arr1 = sort_helper(arr, len1);
+    void **arr2 = sort_helper(arr + len1, len2);
+
+    return merge(arr1, arr2, len1, len2);
+}
+
 void *sort_worker(void *input)
 {
     int len = ((sort_args *)input)->len;
-    void **arr = *((sort_args *)input)->subarr;
+    void **arr = *(((sort_args *)input)->subarr);
 
-    // *((sort_args *)input)->subarr =  sorted array
+    *(((sort_args *)input)->subarr) = sort_helper(arr, len);
 }
 
 // might only be able to merge adjacent arrays?
@@ -35,19 +102,8 @@ void *merge_worker(void *input)
     void **arr1 = *inp->subarr1;
     void **arr2 = *inp->subarr2;
 
-    void **ret = malloc(sizeof(void *) * (len1 + len2));
-    if (ret == NULL)
-    {
-        printf("Failed to malloc in merge worker\n");
-        exit(1);
-    }
-
-    // merge
-
     // this is definetely questionable
-    *inp->subarr1 = ret;
-    // even more questionable, probably free arr1 and arr2 instead
-    // free(ret);
+    *inp->subarr1 = merge(arr1, arr2, len1, len2);
 }
 
 int main(char *argc, int argv)
@@ -61,7 +117,7 @@ int main(char *argc, int argv)
     int numEntries = filesize / 100;
     int extra = numEntries % numThreads;
 
-    void *subarrays[numThreads];
+    void **subarrays[numThreads];
     int subLengths[numThreads];
     int index = 0;
     int oldIndex = 0;
@@ -97,8 +153,44 @@ int main(char *argc, int argv)
         pthread_join(threads[i], NULL);
     }
 
-    // Merge results
+    // TODO: Merge results
     int remainingArrs = numThreads;
+    while (remainingArrs > 1)
+    {
+        int toMerge = remainingArrs / 2;
+
+        for (int i = 0; i < toMerge; i++)
+        {
+            // fill in args
+            merge_args *args = (merge_args *)malloc(sizeof(merge_args));
+
+            // find suitable subarray to merge with, start from end
+            for (int j = numThreads - 1; j > 0; j--)
+            {
+                if (subLengths[j] != -1)
+                {
+                    args->subarr1 = &subarrays[i];
+                    args->subarr2 = &subarrays[j];
+                    args->len1 = subLengths[i];
+                    args->len2 = subLengths[j];
+
+                    // update size of sub1
+                    subLengths[i] += subLengths[j];
+                    // indicate that sub2 has been merged already
+                    subLengths[j] = -1;
+                    break;
+                }
+            }
+
+            pthread_create(&threads[i], NULL, merge_worker, (void *)args);
+        }
+
+        for (int i = 0; i < toMerge; i++)
+        {
+            pthread_join(threads[i], NULL);
+        }
+        remainingArrs -= toMerge;
+    }
 
     exit(0);
 }
