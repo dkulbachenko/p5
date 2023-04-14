@@ -62,7 +62,7 @@ void **merge(void **arr1, void **arr2, int len1, int len2)
     while (len2)
     {
         *(ret + index) = *arr2;
-        arr1++;
+        arr2++;
         len2--;
         index++;
     }
@@ -90,10 +90,12 @@ void **sort_helper(void **arr, int length)
 
 void *sort_worker(void *input)
 {
+    printf("start of sort worker\n");
     int len = ((sort_args *)input)->len;
     void **arr = *(((sort_args *)input)->subarr);
 
     *(((sort_args *)input)->subarr) = sort_helper(arr, len);
+    // printf("after sorting on a thread\n");
     return NULL;
 }
 
@@ -144,7 +146,7 @@ int main(int argc, char **argv)
     int subLengths[numThreads];
     int index = 0;
     int oldIndex = 0;
-
+    printf("before splitting\n");
     // split large array and create threads
     for (int i = 0; i < numThreads; i++)
     {
@@ -175,6 +177,8 @@ int main(int argc, char **argv)
     {
         pthread_join(threads[i], NULL);
     }
+
+    printf("after sort join\n");
 
     // TODO: Merge results
     int remainingArrs = numThreads;
@@ -215,9 +219,13 @@ int main(int argc, char **argv)
         remainingArrs -= toMerge;
     }
 
+    // printf("test: %x", (unsigned int)(*subarrays[0]));
     FILE *fp;
     fp = fopen(argv[2], "w");
-    fwrite(*subarrays[0], 1, sizeof(*subarrays[0]), fp);
+    printf("before write\n");
+    fwrite((char *)*subarrays[0], 100, num_entries, fp);
+    fsync(fileno(fp));
+    printf("after write\n");
     fclose(fp);
     exit(0);
 }
