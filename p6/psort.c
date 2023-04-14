@@ -9,14 +9,14 @@
 
 typedef struct sort_args
 {
-    int *len;
+    int len;
     void ***subarr;
 } sort_args;
 
 typedef struct merge_args
 {
-    int *len1;
-    int *len2;
+    int len1;
+    int len2;
     void ***subarr1;
     void ***subarr2;
 } merge_args;
@@ -94,6 +94,7 @@ void *sort_worker(void *input)
     void **arr = *(((sort_args *)input)->subarr);
 
     *(((sort_args *)input)->subarr) = sort_helper(arr, len);
+    return NULL;
 }
 
 // might only be able to merge adjacent arrays?
@@ -108,6 +109,7 @@ void *merge_worker(void *input)
 
     // this is definetely questionable
     *inp->subarr1 = merge(arr1, arr2, len1, len2);
+    return NULL;
 }
 
 int main(int argc, char **argv)
@@ -118,8 +120,8 @@ int main(int argc, char **argv)
     {
         exit(1);
     }
-    char *input_name = argv[1];
-    char *output_name = argv[2];
+    // char *input_name = argv[1];
+    // char *output_name = argv[2];
     file_pointer = open(argv[1], O_RDONLY);
     fstat(file_pointer, &file_status);
     char *file_content = mmap(NULL, file_status.st_size, PROT_READ, MAP_PRIVATE, file_pointer, 0);
