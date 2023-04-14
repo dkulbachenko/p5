@@ -108,12 +108,15 @@ void *merge_worker(void *input)
 
 int main(char *argc, int argv)
 {
+
+    // ****IO AND INPUT PROCESSING GOES HERE****
+    void **entries; // list of 100 byte entries from mmap
     int filesize = 1000000;
     int numThreads = 12;
+    // ****END IO AND INPUT PROCESSING****
 
     pthread_t threads[numThreads];
 
-    void **entries; // list of 100 byte entries from mmap
     int numEntries = filesize / 100;
     int extra = numEntries % numThreads;
 
