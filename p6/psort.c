@@ -215,5 +215,9 @@ int main(int argc, char **argv)
         remainingArrs -= toMerge;
     }
 
+    FILE *fp;
+    fp = fopen(argv[2], "w");
+    fwrite(*subarrays[0], 1, sizeof(*subarrays[0]), fp);
+    fclose(fp);
     exit(0);
 }
