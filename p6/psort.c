@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include <fcntl.h>
+#include <string.h>
+
 
 typedef struct sort_args
 {
@@ -106,13 +111,29 @@ void *merge_worker(void *input)
     *inp->subarr1 = merge(arr1, arr2, len1, len2);
 }
 
-int main(char *argc, int argv)
+int main(int argc, char** argv)
 {
+    int file_pointer; // file pointer
+    struct stat file_status;  // file status 
+    if (argc != 4 ){
+        exit(1);
+    }
+    char* input_name = argv[1];
+    char* output_name = argv[2];
+    file_pointer = open(argv[1], O_RDONLY);
+    fstat(file_pointer, &file_status);
+    char* file_content = mmap(NULL, file_status.st_size, PROT_READ, MAP_PRIVATE, file_pointer, 0);
+    
+    // use this one to iterate
+    char* file_content_tmp = strdup(file_content);
+
+
 
     // ****IO AND INPUT PROCESSING GOES HERE****
     void **entries; // list of 100 byte entries from mmap
     int filesize = 1000000;
-    int numThreads = 12;
+    int numThreads = atoi(argv[3]); // the third element
+
     // ****END IO AND INPUT PROCESSING****
 
     pthread_t threads[numThreads];
