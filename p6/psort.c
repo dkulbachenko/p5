@@ -30,7 +30,7 @@ void **merge(void **arr1, void **arr2, int len1, int len2)
         printf("Failed malloc in merge\n");
     }
 
-    printf("len1: %d    len2: %d\n", len1, len2);
+    // printf("len1: %d    len2: %d\n", len1, len2);
 
     // merge arr1 and arr 2
     int index = 0;
@@ -40,18 +40,18 @@ void **merge(void **arr1, void **arr2, int len1, int len2)
         // compare keys
         int k1 = *(int *)(arr1[0]);
         int k2 = *(int *)(arr2[0]);
-        printf("key1: %c, key2: %c\n", k1, k2);
+        // printf("key1: %c, key2: %c\n", k1, k2);
         if (k1 < k2)
         {
             ret[index] = arr1[0];
-            printf("added %c to ret\n", k1);
+            // printf("added %c to ret\n", k1);
             arr1++;
             len1--;
         }
         else
         {
             ret[index] = arr2[0];
-            printf("added %c to ret\n", k2);
+            // printf("added %c to ret\n", k2);
             arr2++;
             len2--;
         }
@@ -62,7 +62,7 @@ void **merge(void **arr1, void **arr2, int len1, int len2)
     while (len1)
     {
         ret[index] = arr1[0];
-        printf("added %c to ret\n", *(int *)(arr1[0]));
+        // printf("added %c to ret\n", *(int *)(arr1[0]));
         arr1++;
         len1--;
         index++;
@@ -70,7 +70,7 @@ void **merge(void **arr1, void **arr2, int len1, int len2)
     while (len2)
     {
         ret[index] = arr2[0];
-        printf("added %c to ret\n", *(int *)(arr2[0]));
+        // printf("added %c to ret\n", *(int *)(arr2[0]));
         arr2++;
         len2--;
         index++;
@@ -90,6 +90,7 @@ void **sort_helper(void **arr, int length)
 
     int len1 = length / 2;
     int len2 = length - len1;
+
     // call recrusive
     void **arr1 = sort_helper(arr, len1);
     void **arr2 = sort_helper(arr + len1, len2);
@@ -102,6 +103,9 @@ void *sort_worker(void *input)
     printf("start of sort worker\n");
     int len = ((sort_args *)input)->len;
     void **arr = *(((sort_args *)input)->subarr);
+
+    // printf("first key: %c\n", *(int *)(arr[0]));
+    // printf("length: %d\n", len);
 
     *(((sort_args *)input)->subarr) = sort_helper(arr, len);
     // printf("after sorting on a thread\n");
@@ -155,9 +159,10 @@ int main(int argc, char **argv)
     int subLengths[numThreads];
     int index = 0;
     int oldIndex = 0;
-    printf("before splitting\n");
+    // printf("before splitting\n");
     // split large array and create threads
     void **oldptr = NULL;
+
     for (int i = 0; i < numThreads; i++)
     {
         // assign start of each subarray
@@ -193,11 +198,11 @@ int main(int argc, char **argv)
         printf("pointer didn't get updated\n");
     }
 
-    printf("key one after merge: %c\n", *(int *)(subarrays[0][0]));
-    printf("key two after merge: %c\n", *(int *)(subarrays[0][1]));
-    printf("key three after merge: %c\n", *(int *)(subarrays[0][2]));
+    // printf("key one after merge: %c\n", *(int *)(subarrays[0][0]));
+    // printf("key two after merge: %c\n", *(int *)(subarrays[0][1]));
+    // printf("key three after merge: %c\n", *(int *)(subarrays[0][2]));
 
-    printf("after sort join\n");
+    // printf("after sort join\n");
 
     // TODO: Merge results
     int remainingArrs = numThreads;
@@ -241,13 +246,13 @@ int main(int argc, char **argv)
     // printf("test: %x", (unsigned int)(*subarrays[0]));
     FILE *fp;
     fp = fopen(argv[2], "w");
-    printf("before write\n");
+    // printf("before write\n");
     for (int i = 0; i < num_entries; i++)
     {
         fwrite((char *)subarrays[0][i], 100, 1, fp);
     }
     fsync(fileno(fp));
-    printf("after write\n");
+    // printf("after write\n");
     fclose(fp);
     exit(0);
 }
