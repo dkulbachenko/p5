@@ -6,6 +6,7 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 #include <string.h>
+#include <sys/time.h>
 
 typedef struct sort_args
 {
@@ -152,8 +153,9 @@ int main(int argc, char **argv)
 
     // begin actual main function
     pthread_t threads[numThreads];
-    if (num_entries < numThreads) { // special case 
-         numThreads = num_entries;
+    if (num_entries < numThreads)
+    { // special case
+        numThreads = num_entries;
     }
     int extra = num_entries % numThreads;
 
@@ -164,7 +166,8 @@ int main(int argc, char **argv)
     // printf("before splitting\n");
     // split large array and create threads
     void **oldptr = NULL;
-
+    struct timeval begin, end;
+    gettimeofday(&begin, 0);
     for (int i = 0; i < numThreads; i++)
     {
         // assign start of each subarray
@@ -245,7 +248,15 @@ int main(int argc, char **argv)
         remainingArrs -= toMerge;
     }
 
-    // printf("test: %x", (unsigned int)(*subarrays[0]));
+    gettimeofday(&end, 0);
+
+    long seconds = end.tv_sec - begin.tv_sec;
+    long microseconds = end.tv_usec - begin.tv_usec;
+    double elapsed = seconds + microseconds * 1e-6;
+
+    printf("Took %f seconds\n", elapsed);
+
+    // printf("test: % ", (unsigned int)(*subarrays[0]));
     FILE *fp;
     fp = fopen(argv[2], "w");
     // printf("before write\n");
