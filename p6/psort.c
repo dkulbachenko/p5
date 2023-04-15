@@ -152,7 +152,9 @@ int main(int argc, char **argv)
 
     // begin actual main function
     pthread_t threads[numThreads];
-
+    if (num_entries < numThreads) { // special case 
+         numThreads = num_entries;
+    }
     int extra = num_entries % numThreads;
 
     void **subarrays[numThreads];
