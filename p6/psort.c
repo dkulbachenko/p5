@@ -157,7 +157,7 @@ int main(int argc, char **argv)
     int oldIndex = 0;
     printf("before splitting\n");
     // split large array and create threads
-    void ***oldptr = NULL;
+    void **oldptr = NULL;
     for (int i = 0; i < numThreads; i++)
     {
         // assign start of each subarray
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
         // create a struct containing the length and pointer to subarr
         sort_args *args = (sort_args *)malloc(sizeof(sort_args));
         args->len = subLengths[i];
-        oldptr = &subarrays[i];
+        oldptr = subarrays[i];
         args->subarr = &(subarrays[i]);
 
         pthread_create(&threads[i], NULL, sort_worker, (void *)args);
@@ -188,10 +188,14 @@ int main(int argc, char **argv)
     {
         pthread_join(threads[i], NULL);
     }
-    if (subarrays[0] == *oldptr)
+    if (subarrays[0] == oldptr)
     {
         printf("pointer didn't get updated\n");
     }
+
+    printf("key one after merge: %c\n", *(int *)(subarrays[0][0]));
+    printf("key two after merge: %c\n", *(int *)(subarrays[0][1]));
+    printf("key three after merge: %c\n", *(int *)(subarrays[0][2]));
 
     printf("after sort join\n");
 
@@ -238,7 +242,10 @@ int main(int argc, char **argv)
     FILE *fp;
     fp = fopen(argv[2], "w");
     printf("before write\n");
-    fwrite((char *)*subarrays[0], 100, num_entries, fp);
+    for (int i = 0; i < num_entries; i++)
+    {
+        fwrite((char *)subarrays[0][i], 100, 1, fp);
+    }
     fsync(fileno(fp));
     printf("after write\n");
     fclose(fp);
