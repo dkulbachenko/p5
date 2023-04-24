@@ -43,11 +43,41 @@ int main(int argc, char **argv)
     int inode_total = super.s_inodes_count; // total number of inodes in the file system.
     off_t inode_starter = locate_inode_table(0, &group);
     off_t inode_table = lseek(fd, inode_starter, SEEK_SET);
+    
+    // if the dir does not exist then create it 
+    char output_dir[] = "output";
+    struct stat st = {0};
+    if (stat(output_dir, &st) == -1 ) mkdir(output_dir, 0700);
     for (int i = 0; i < inode_total; i ++){
         off_t inode_offset = inode_table + (inode_size * i);
         lseek(fd, inode_offset, SEEK_SET);
         struct ext2_inode inode;
         read(fd, &inode, sizeof(inode));
+        uint32_t block_index = inode.i_block[0];
+        if (block_index != 0){
+            off_t offset = block_index * block_size;
+            char buffer[block_size];
+            pread(fd, buffer, block_size, offset);
+            int is_jpg = 0; 
+            if (buffer[0] == (char)0xff &&
+                buffer[1] == (char)0xd8 &&
+                buffer[2] == (char)0xff &&
+                (buffer[3] == (char)0xe0 ||
+                buffer[3] == (char)0xe1 ||
+                buffer[3] == (char)0xe8)) 
+            {
+                is_jpg = 1;
+            }
+        
+            if (is_jpg == 1){
+                char output_filename[100];
+                sprintf(output_filename, "output/file-%d.jpg", i + 1);
+                FILE *output_file = fopen(output_filename, "w");
+                
+
+
+            }
+        }
     }
     
     return 0;
