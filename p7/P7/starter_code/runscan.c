@@ -38,6 +38,17 @@ int main(int argc, char **argv)
     // example read first the super-block and group-descriptor
     read_super_block(fd, &super);
     read_group_descs(fd, &groups, num_groups);
-
+    
+    int inode_size = super.s_inode_size;   // inode size
+    int inode_total = super.s_inodes_count; // total number of inodes in the file system.
+    off_t inode_starter = locate_inode_table(0, &group);
+    off_t inode_table = lseek(fd, inode_starter, SEEK_SET);
+    for (int i = 0; i < inode_total; i ++){
+        off_t inode_offset = inode_table + (inode_size * i);
+        lseek(fd, inode_offset, SEEK_SET);
+        struct ext2_inode inode;
+        read(fd, &inode, sizeof(inode));
+    }
+    
     return 0;
 }
