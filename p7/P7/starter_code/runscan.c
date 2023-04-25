@@ -92,8 +92,24 @@ int main(int argc, char **argv)
                     i_num++;
                     FILE *output_file = fopen(output_filename, "w");
                     // find out file size
+                    int file_size = inode.i_size;
                     // go through inode block pointers based on size
-                    // write each relevant block to file
+                    // avoid truncate
+                    int num_blocks = (file_size + block_size - 1) / block_size;
+                    for (int k = 0; k < num_blocks; k ++){
+                        uint32_t b = inode.i_block[k];
+                        if (b != 0){
+                            off_t each_block_offsite = block_index * block_size;
+                            char buffer[block_size];
+                            pread(fd, buffer, block_size, each_block_offsite);
+                            // write each relevant block to file
+                            fwrite(buffer, sizeof(char), block_size, output_file);
+
+                        } 
+                    }
+                    fclose(output_file);
+                    
+
                 }
             }
         }
