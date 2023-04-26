@@ -7,6 +7,8 @@
 #include <sys/types.h>
 
 ext2_group_desc *groups;
+int imgs[100];
+int num_images = 0;
 void read_directory_data_blocks(int fd, struct ext2_inode inode, struct ext2_super_block super)
 {
     off_t inode_starter = locate_inode_table(0, groups);
@@ -18,7 +20,7 @@ void read_directory_data_blocks(int fd, struct ext2_inode inode, struct ext2_sup
         if (inode.i_block[i] != 0)
         {
             int offset = 0;
-            
+
             while (offset < block_size && num_blocks > 0)
             {
                 char buffer[block_size];
@@ -28,15 +30,15 @@ void read_directory_data_blocks(int fd, struct ext2_inode inode, struct ext2_sup
                 struct ext2_dir_entry_2 *entry = (struct ext2_dir_entry_2 *)buffer;
                 while ((char *)entry < buffer + read_size)
                 {
-                    if (entry->file_type == 2) {
-                        
+                    if (entry->file_type == 2)
+                    {
+
                         // recursive call
-                    }else{
+                    }
+                    else
+                    {
                         // array of file names
-                        char* names = entry->name;
-                        
-
-
+                        char *names = entry->name;
                     }
 
                     // perhaps get the name from the entry
@@ -46,8 +48,21 @@ void read_directory_data_blocks(int fd, struct ext2_inode inode, struct ext2_sup
     }
 }
 
-
-
+void write_indirect(int fd, int block_num, FILE *output_file)
+{
+    for (int i = 0; i < 256; i++)
+    {
+        char buffer[block_size];
+        off_t indirect_off = block_num * block_size;
+        pread(fd, buffer, block_size, indirect_off);
+        uint32_t block_index = *(int *)(buffer + (4 * (i)));
+        if (block_index == 0)
+            continue;
+        off_t offset = block_index * block_size;
+        pread(fd, buffer, block_size, offset);
+        fwrite(buffer, sizeof(char), block_size, output_file);
+    }
+}
 
 int main(int argc, char **argv)
 {
@@ -72,9 +87,9 @@ int main(int argc, char **argv)
 
     // int num_groups = super.s_blocks_count / super.s_blocks_per_group;
     int num_groups = (super.s_blocks_count + blocks_per_group - 1) / blocks_per_group; // this was in other starter file
-    printf("num of groups in line 29: %d\n", num_groups);
-    printf("num of blocks in line 30: %d\n", super.s_blocks_count);
-    printf("num of blocks per group in line 31: %d\n", blocks_per_group);
+    // printf("num of groups in line 29: %d\n", num_groups);
+    // printf("num of blocks in line 30: %d\n", super.s_blocks_count);
+    // printf("num of blocks per group in line 31: %d\n", blocks_per_group);
 
     if (groups == NULL)
     {
@@ -115,7 +130,7 @@ int main(int argc, char **argv)
     // FILE *output_file;
 
     // char output_filename[100] = ;
-    printf("new file name: %s", "test");
+    // printf("new file name: %s", "test");
 
     for (int i = 0; i < num_groups; i++)
     {
@@ -166,26 +181,52 @@ int main(int argc, char **argv)
                     int blocks_required = (file_size + file_size % block_size) / block_size;
                     printf("blocks required: %d\n", blocks_required);
 
-                    for (int b = 0; b < blocks_required; b++)
+                    // add file_name_num to array
+                    imgs[num_images] = file_name_number;
+                    // update amount of images
+                    num_images++;
+
+                    for (int b = 0; b < 15; b++)
                     {
                         if (b <= 11)
                         {
                             block_index = inode.i_block[b];
+                            if (block_index == 0)
+                                continue;
+                            printf("b: %d\n", b);
                             printf("block index: %d\n", block_index);
+                            offset = block_index * block_size;
+                            pread(fd, buffer, block_size, offset);
+                            fwrite(buffer, sizeof(char), block_size, output_file);
+                        }
+                        else if (b == 12)
+                        {
+                            // single indirect
+                            write_indirect(fd, inode.i_block[b], output_file);
+                        }
+                        else if (b == 13)
+                        {
+                            // double indirect
+                            int block_num = inode.i_block[b];
+                            off_t indirect_off = block_num * block_size;
+                            pread(fd, buffer, block_size, indirect_off);
+                            // int c = 0;
+                            // while (*(int *)(buffer + (4 * (c))) != 0)
+                            for (int c = 0; c < 256; c++)
+                            {
+                                block_num = *(int *)(buffer + (4 * (c)));
+                                if (block_num != 0)
+                                    write_indirect(fd, block_num, output_file);
+                            }
                         }
                         else
                         {
-                            // need to read indirect block
-                            off_t indirect_off = inode.i_block[12] * block_size;
-                            pread(fd, buffer, block_size, indirect_off);
-                            block_index = *(int *)(buffer + (4 * (b - 12)));
+                            int block_num = inode.i_block[b];
+                            if (block_num != 0)
+                            { // need to triple indirect
+                                printf("didn't think triple indirect would be necessary\n");
+                            }
                         }
-
-                        // now that we have block number, copy that block into output file
-
-                        offset = block_index * block_size;
-                        pread(fd, buffer, block_size, offset);
-                        fwrite(buffer, sizeof(char), block_size, output_file);
                     }
                     fclose(output_file);
                 }
