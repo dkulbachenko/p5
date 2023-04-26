@@ -18,6 +18,7 @@ void read_directory_data_blocks(int fd, struct ext2_inode inode, struct ext2_sup
         if (inode.i_block[i] != 0)
         {
             int offset = 0;
+            
             while (offset < block_size && num_blocks > 0)
             {
                 char buffer[block_size];
@@ -27,8 +28,16 @@ void read_directory_data_blocks(int fd, struct ext2_inode inode, struct ext2_sup
                 struct ext2_dir_entry_2 *entry = (struct ext2_dir_entry_2 *)buffer;
                 while ((char *)entry < buffer + read_size)
                 {
-                    
-                    char name[EXT2_NAME_LEN + 1];
+                    if (entry->file_type == 2) {
+                        
+                        // recursive call
+                    }else{
+                        // array of file names
+                        char* names = entry->name;
+                        
+
+
+                    }
 
                     // perhaps get the name from the entry
                 }
@@ -36,6 +45,7 @@ void read_directory_data_blocks(int fd, struct ext2_inode inode, struct ext2_sup
         }
     }
 }
+
 
 
 
