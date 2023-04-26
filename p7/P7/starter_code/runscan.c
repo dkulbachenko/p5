@@ -6,34 +6,38 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-// void read_directory_data_blocks(int fd, struct ext2_inode inode, struct ext2_super_block super)
-// {
-
-//     int num_blocks = (inode.i_size + block_size - 1) / block_size;
-//     for (int i = 0; i < EXT2_N_BLOCKS; i++) // ext2_n_block is max number of block in inode
-//     {
-//         if (inode.i_block[i] != 0)
-//         {
-//             int offset = 0;
-//             while (offset < block_size && num_blocks > 0)
-//             {
-//                 char buffer[block_size];
-
-//                 int read_size = block_size;
-//                 pread(fd, buffer, read_size, inode.i_block[i] * block_size + offset);
-//                 struct ext2_dir_entry_2 *entry = (struct ext2_dir_entry_2 *)buffer;
-//                 while ((char *)entry < buffer + read_size)
-//                 {
-//                     char name[EXT2_NAME_LEN + 1];
-
-//                     // perhaps get the name from the entry
-//                 }
-//             }
-//         }
-//     }
-// }
-
 ext2_group_desc *groups;
+void read_directory_data_blocks(int fd, struct ext2_inode inode, struct ext2_super_block super)
+{
+    off_t inode_starter = locate_inode_table(0, groups);
+    struct ext2_inode root;
+    read_inode(fd, inode_starter, EXT2_ROOT_INO, &inode, super.s_inode_size);
+    int num_blocks = (inode.i_size + block_size - 1) / block_size;
+    for (int i = 0; i < EXT2_N_BLOCKS; i++) // ext2_n_block is max number of block in inode
+    {
+        if (inode.i_block[i] != 0)
+        {
+            int offset = 0;
+            while (offset < block_size && num_blocks > 0)
+            {
+                char buffer[block_size];
+
+                int read_size = block_size;
+                pread(fd, buffer, read_size, inode.i_block[i] * block_size + offset);
+                struct ext2_dir_entry_2 *entry = (struct ext2_dir_entry_2 *)buffer;
+                while ((char *)entry < buffer + read_size)
+                {
+                    
+                    char name[EXT2_NAME_LEN + 1];
+
+                    // perhaps get the name from the entry
+                }
+            }
+        }
+    }
+}
+
+
 
 int main(int argc, char **argv)
 {
