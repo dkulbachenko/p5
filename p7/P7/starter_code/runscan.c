@@ -16,32 +16,41 @@ void read_block(int fd, char* buffer, uint32_t block_num, int block_size){
     pread(fd, buffer, block_size, offset);
 }
 
+/**
+ * read sub directory, starting at root, then if that inode is a directory then recursive call this method
+*/
+void read_subdirectory(int fd, struct ext2_super_block super, struct ext2_inode inode){
+        int block_size = super.s_log_block_size;
+        struct ext2_dir_entry dir_entry;
+        off_t offset = 0;
+        int i = 0;
+        uint32_t block_index = inode.i_block[i];
 
-void read_directory_data_blocks(int fd, struct ext2_super_block super)
-{
-    off_t inode_starter = locate_inode_table(0, groups);
-    struct ext2_inode root;
-    read_inode(fd, inode_starter, EXT2_ROOT_INO, &root, super.s_inode_size);
-    uint32_t block_index = root.i_block[0];
+        // go through all block
+        while (block_index != 0)
+        {
+            char block_buffer[block_size];
+            read_block(fd, block_buffer, block_index, block_size);
+            // each block contain several entry
+            while (offset < block_size)
+            {
+                memcpy(&dir_entry, block_buffer + offset, sizeof(struct ext2_dir_entry_2));
+                // increment offset, length is one entry size
+                offset += dir_entry.rec_len;
 
-    struct ext2_dir_entry_2 dir_entry;
-    int offset = 0;
-    int block_size = super.s_log_block_size;
-    while(block_index != 0){
-        char block_buffer[block_size];
-        read_block(fd, block_buffer, block_index, block_size);
-
-        while(offset < block_size){
-            // all entries in block_buffer, block_buffer + offset represent each entry
-            memcpy(&dir_entry, block_buffer + offset, sizeof(struct ext2_dir_entry_2));
-            offset += dir_entry.rec_len;
-            int name_len = dir_entry.name_len & 0xFF;
-            char name [EXT2_NAME_LEN];
-            strncpy(name, dir_entry.name, name_len);
-            name[name_len] = '\0';
-            if (dir_entry.file_type == 2){
+                // locate the inode, the inode is a dir or a file
+                int group_id = (dir_entry.inode + dir_entry.inode % super.s_inodes_per_group) / (super.s_inodes_per_group);
+                off_t inode_starter = locate_inode_table(group_id, groups);
+                int offset = dir_entry.inode % super.s_inodes_per_group;
+                struct ext2_inode inode_sub;
+                read_inode(fd, inode_starter, offset + 1, &inode_sub, super.s_inode_size);
+                if (dir_entry.file_type == 2){
+                    // get the inode and then recursive call
+                    // in a dir, each block represent another entry, file or dir
+                    read_subdirectory(fd, super, inode_sub);
                 
             }else{
+                // in this case, just read the file
                 for (int i = 0; i < num_images; i ++){
                     if (dir_entry.inode == imgs[i]){
                         char file_read_from[100];
@@ -54,23 +63,29 @@ void read_directory_data_blocks(int fd, struct ext2_super_block super)
                         fscanf(input_file, "%s", data);
                         fprintf(output_file, "%s", data);
                         fclose(input_file);
-                        fclose(output_file);
-                        // int group_id = (dir_entry.inode + dir_entry.inode % super.s_inodes_per_group) / (super.s_inodes_per_group);
-                        // off_t inode_starter = locate_inode_table(group_id, groups);
-                        // int offset = dir_entry.inode % super.s_inodes_per_group;
-                        // struct ext2_inode inode;
-                        // read_inode(fd, inode_starter, offset + 1, &inode, super.s_inode_size);
-                    
-                        
+                        fclose(output_file);                   
                         
                     }
                 }
             }
+        }
+            
+        block_index = inode.i_block[i ++];
+    }
+    
+}
+
+void read_directory_data_blocks(int fd, struct ext2_super_block super)
+{
+    off_t inode_starter = locate_inode_table(0, groups);
+    struct ext2_inode root;
+    read_inode(fd, inode_starter, EXT2_ROOT_INO, &root, super.s_inode_size);
+    read_subdirectory(fd, super, root);
 
         }
 
-    }
-    void read_subdirectory(int fd, struct ext2_super_block super, struct ext2_inode inode)
+    
+
 
 
 //     for (int i = 0; i < EXT2_N_BLOCKS; i++) // ext2_n_block is max number of block in inode
@@ -120,7 +135,7 @@ void read_directory_data_blocks(int fd, struct ext2_super_block super)
 //         pread(fd, buffer, block_size, offset);
 //         fwrite(buffer, sizeof(char), block_size, output_file);
 //     }
-}
+
 
 int main(int argc, char **argv)
 {
