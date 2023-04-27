@@ -9,59 +9,117 @@
 ext2_group_desc *groups;
 int imgs[100];
 int num_images = 0;
-void read_directory_data_blocks(int fd, struct ext2_inode inode, struct ext2_super_block super)
+char* dir_name;
+// helper method read the data into the buffer
+void read_block(int fd, char* buffer, uint32_t block_num, int block_size){
+    off_t offset = block_num * block_size;
+    pread(fd, buffer, block_size, offset);
+}
+
+
+void read_directory_data_blocks(int fd, struct ext2_super_block super)
 {
     off_t inode_starter = locate_inode_table(0, groups);
     struct ext2_inode root;
-    read_inode(fd, inode_starter, EXT2_ROOT_INO, &inode, super.s_inode_size);
-    int num_blocks = (inode.i_size + block_size - 1) / block_size;
-    for (int i = 0; i < EXT2_N_BLOCKS; i++) // ext2_n_block is max number of block in inode
-    {
-        if (inode.i_block[i] != 0)
-        {
-            int offset = 0;
+    read_inode(fd, inode_starter, EXT2_ROOT_INO, &root, super.s_inode_size);
+    uint32_t block_index = root.i_block[0];
 
-            while (offset < block_size && num_blocks > 0)
-            {
-                char buffer[block_size];
+    struct ext2_dir_entry_2 dir_entry;
+    int offset = 0;
+    int block_size = super.s_log_block_size;
+    while(block_index != 0){
+        char block_buffer[block_size];
+        read_block(fd, block_buffer, block_index, block_size);
 
-                int read_size = block_size;
-                pread(fd, buffer, read_size, inode.i_block[i] * block_size + offset);
-                struct ext2_dir_entry_2 *entry = (struct ext2_dir_entry_2 *)buffer;
-                while ((char *)entry < buffer + read_size)
-                {
-                    if (entry->file_type == 2)
-                    {
-
-                        // recursive call
+        while(offset < block_size){
+            // all entries in block_buffer, block_buffer + offset represent each entry
+            memcpy(&dir_entry, block_buffer + offset, sizeof(struct ext2_dir_entry_2));
+            offset += dir_entry.rec_len;
+            int name_len = dir_entry.name_len & 0xFF;
+            char name [EXT2_NAME_LEN];
+            strncpy(name, dir_entry.name, name_len);
+            name[name_len] = '\0';
+            if (dir_entry.file_type == 2){
+                
+            }else{
+                for (int i = 0; i < num_images; i ++){
+                    if (dir_entry.inode == imgs[i]){
+                        char file_read_from[100];
+                        sprintf(file_read_from, "%s/file-%d.jpg", dir_name, imgs[i]);
+                        char output_file_name[100];
+                        sprintf(output_file_name, "%s/%s", dir_name, dir_entry.name);
+                        FILE* input_file = fopen(file_read_from, "r");
+                        FILE * output_file = fopen(output_file_name, "w");
+                        char data[100];
+                        fscanf(input_file, "%s", data);
+                        fprintf(output_file, "%s", data);
+                        fclose(input_file);
+                        fclose(output_file);
+                        // int group_id = (dir_entry.inode + dir_entry.inode % super.s_inodes_per_group) / (super.s_inodes_per_group);
+                        // off_t inode_starter = locate_inode_table(group_id, groups);
+                        // int offset = dir_entry.inode % super.s_inodes_per_group;
+                        // struct ext2_inode inode;
+                        // read_inode(fd, inode_starter, offset + 1, &inode, super.s_inode_size);
+                    
+                        
+                        
                     }
-                    else
-                    {
-                        // array of file names
-                        char *names = entry->name;
-                    }
-
-                    // perhaps get the name from the entry
                 }
             }
-        }
-    }
-}
 
-void write_indirect(int fd, int block_num, FILE *output_file)
-{
-    for (int i = 0; i < 256; i++)
-    {
-        char buffer[block_size];
-        off_t indirect_off = block_num * block_size;
-        pread(fd, buffer, block_size, indirect_off);
-        uint32_t block_index = *(int *)(buffer + (4 * (i)));
-        if (block_index == 0)
-            continue;
-        off_t offset = block_index * block_size;
-        pread(fd, buffer, block_size, offset);
-        fwrite(buffer, sizeof(char), block_size, output_file);
+        }
+
     }
+    void read_subdirectory(int fd, struct ext2_super_block super, struct ext2_inode inode)
+
+
+//     for (int i = 0; i < EXT2_N_BLOCKS; i++) // ext2_n_block is max number of block in inode
+//     {
+//         if (inode.i_block[i] != 0)
+//         {
+//             int offset = 0;
+
+//             while (offset < block_size && num_blocks > 0)
+//             {
+//                 char buffer[block_size];
+
+//                 int read_size = block_size;
+//                 pread(fd, buffer, read_size, inode.i_block[i] * block_size + offset);
+//                 struct ext2_dir_entry_2 *entry = (struct ext2_dir_entry_2 *)buffer;
+//                 while ((char *)entry < buffer + read_size)
+//                 {
+//                     if (entry->file_type == 2)
+//                     {
+
+//                         // recursive call
+//                     }
+//                     else
+//                     {
+//                         // array of file names
+//                         char *names = entry->name;
+//                     }
+
+//                     // perhaps get the name from the entry
+//                 }
+//             }
+//         }
+//     }
+// }
+
+// void write_indirect(int fd, int block_num, FILE *output_file)
+// {
+//     for (int i = 0; i < 256; i++)
+//     {
+//         char buffer[block_size];
+//         off_t indirect_off = block_num * block_size;
+//         pread(fd, buffer, block_size, indirect_off);
+//         uint32_t block_index = *(int *)(buffer + (4 * (i)));
+//         if (block_index == 0)
+//             continue;
+//         off_t offset = block_index * block_size;
+//         pread(fd, buffer, block_size, offset);
+//         fwrite(buffer, sizeof(char), block_size, output_file);
+//     }
 }
 
 int main(int argc, char **argv)
@@ -79,7 +137,6 @@ int main(int argc, char **argv)
     fd = open(argv[1], O_RDONLY); /* open disk image */
 
     ext2_read_init(fd);
-
     struct ext2_super_block super;
     groups = malloc(sizeof(ext2_group_desc) * num_groups);
     read_super_block(fd, &super);
@@ -112,7 +169,7 @@ int main(int argc, char **argv)
     struct stat st = {0};
     if (stat(argv[2], &st) == -1)
         mkdir(argv[2], 0700);
-
+    dir_name = argv[2];
     // if (stat(output_dir, &st) == -1)
     //     mkdir(output_dir, 0700);
 
@@ -202,10 +259,12 @@ int main(int argc, char **argv)
                         else if (b == 12)
                         {
                             // single indirect
+                            
                             write_indirect(fd, inode.i_block[b], output_file);
                         }
                         else if (b == 13)
                         {
+                            
                             // double indirect
                             int block_num = inode.i_block[b];
                             off_t indirect_off = block_num * block_size;
